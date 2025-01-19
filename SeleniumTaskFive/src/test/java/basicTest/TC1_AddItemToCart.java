@@ -26,78 +26,61 @@ public class TC1_AddItemToCart {
 	private String username = "taskfivetasktimothy@gmail.com";
 	private String password = "timothytask555";
 	private LoginPage loginPage;
+	private DetailPage detailPage;
 	
 	@BeforeClass
 	public void setUp() {
-		// setting up the driver
-		// Please Update to your own path to ChromeDriver
 		System.setProperty("webdriver.chrome.driver", "/Users/timothyandrian/Downloads/chromedriver-mac-arm64/chromedriver");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://periplus.com");
 		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		loginPage = new LoginPage(driver);
-		//LOGIN TEST
+		detailPage = new DetailPage(driver);
 		
-		// Click Sign In
 		WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-signin-text")));
 	    signInButton.click();
 	    
-	    // Enter email
 	    loginPage.enterUsername(username);
 	    loginPage.enterPassword(password);
 	    loginPage.clickLoginButton();
 	    
-	    // Wait for a successful login indicator (e.g., welcome message) to appear
 	    WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-account')]")));
 
-	    // Assertion to verify successful login
 	    assertTrue(welcomeMessage.isDisplayed(), "Login failed! Personal Information Not Appear!");
 	    
-	    // Go to Home Page
 	    driver.get("https://periplus.com");
 	}
 
 	@Test
 	public void chooseItem() throws InterruptedException {
-//		owl-prev
 		WebElement previousButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class, 'owl-prev')]")));
 		previousButton.click();
 		
-		// currently-unavailable
 	    WebElement firstActiveItem = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class, 'owl-stage')]//div[contains(@class, 'owl-item active')]//div[@class='single-product']//div[not(contains(@class, 'currently-unavailable'))]//a")));
 	    firstActiveItem.click();
 	 }
 	
 	@Test(dependsOnMethods = {"chooseItem"})
 	public void addItemToCart() throws InterruptedException {
-		// Click add to cart button
-	    WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'btn btn-add-to-cart')]")));
-	    addToCartButton.click();	    
+	    detailPage.clickAddToCart();	    
 	    
-	    // Checking if Item was added successfully to the cart
 	    WebElement modalText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'modal-text')]")));
 	    assertEquals(modalText.getText(),"Success add to cart", "Item failed to be added to cart");
 	    
-	    // Click close icon in the appearing modal
-	    WebElement closeModalButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class, 'btn btn-modal-close close')]")));
-	    closeModalButton.click();
+	    detailPage.clickCloseModal();
 	    
-	    // Click Cart Icon in Nav Bar
-	    WebElement cartButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("show-your-cart")));
-	    cartButton.click();
+	    detailPage.gotoCartPage();
 	}
 	
 	@Test(dependsOnMethods = {"addItemToCart"})
 	public void verifyItemInCart() throws InterruptedException {
-		// Verify Item in Cart
 	    WebElement verifyCartItem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-cart-product')]")));
 	    assertEquals(verifyCartItem.isDisplayed(), true, "No Item in Cart!");
 	}
 
 	@AfterClass
 	public void tearDown() {
-		//TearDown
 		WebElement removeButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'btn btn-cart-remove')]")));
 		removeButton.click();
 		driver.quit();

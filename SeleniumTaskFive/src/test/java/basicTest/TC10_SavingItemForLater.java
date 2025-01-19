@@ -28,32 +28,24 @@ public class TC10_SavingItemForLater {
 	
 	@BeforeClass
 	public void setUp() {
-		// setting up the driver
-		// Please Update to your own path to ChromeDriver
 		System.setProperty("webdriver.chrome.driver", "/Users/timothyandrian/Downloads/chromedriver-mac-arm64/chromedriver");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://periplus.com");
 		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		loginPage = new LoginPage(driver);
-		//LOGIN TEST
 		
-		// Click Sign In
 		WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-signin-text")));
 	    signInButton.click();
 	    
-	    // Enter email
 	    loginPage.enterUsername(username);
 	    loginPage.enterPassword(password);
 	    loginPage.clickLoginButton();
 	    
-	    // Wait for a successful login indicator (e.g., welcome message) to appear
 	    WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-account')]")));
 
-	    // Assertion to verify successful login
 	    assertTrue(welcomeMessage.isDisplayed(), "Login failed! Personal Information Not Appear!");
 	    
-	    // Go to Home Page
 	    driver.get("https://periplus.com");
 	}
 
@@ -61,31 +53,24 @@ public class TC10_SavingItemForLater {
 	public void chooseItem() throws InterruptedException {	
 	    int counter = 0;
 
-	    while (counter < 3) { // Outer loop ensures 3 items are added
-	        // Wait for the product list to load
+	    while (counter < 3) {
 	        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'single-product')]")));
 
-	        // Re-fetch the list of items after navigation
 	        List<WebElement> items = driver.findElements(By.xpath("//div[contains(@class, 'single-product') and not(.//div[contains(text(), 'CURRENTLY UNAVAILABLE')])]//a"));
 
-	        // Iterate through the items
 	        for (WebElement element : items) {
 	            if (counter >= 3) {
-	                break; // Exit the loop if 3 items have been added
+	                break;
 	            }
-
-	            if (!element.getText().isEmpty()) { // Check if the item has text
+	            if (!element.getText().isEmpty()) {
 	                System.out.println("Adding item: " + element.getText());
 
-	                // Click on the item
 	                element.click();
 
-	                // Wait for the Add to Cart button and click it
 	                WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
 	                    By.xpath("//button[contains(@class, 'btn btn-add-to-cart')]")));
 	                addToCartButton.click();
 
-	                // Verify success modal
 	                WebElement modalText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'modal-text')]")));
 	                SoftAssert softS = new SoftAssert();
 	                softS.assertEquals(modalText.getText(), "Success add to cart", "Item failed to be added to cart");
@@ -93,37 +78,28 @@ public class TC10_SavingItemForLater {
 	                	counter++;	                	
 	                }
 
-	                // Close the modal
 	                WebElement closeModalButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'btn btn-modal-close close')]")));
 	                closeModalButton.click();
 
-	                // Navigate back to the homepage
 	                driver.get("https://periplus.com");
 
-	                // Wait for the page to fully load
 	                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'single-product')]")));
 	                int randNumber = (int)(Math.random() * (7 - 1) + 1);
-	            	//		owl-prev
         			WebElement previousButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class, 'owl-prev')]")));
         			for (int j = 0;j<randNumber;j++) {
         				previousButton.click();				
         			}
-	                // Break inner loop to refresh the items list
 	                break;
 	            }
 	        }
 	    }
-
-	    System.out.println("Successfully added 3 items to the cart.");
 	}
 
 	
 	@Test(priority = 1)
 	public void verifyItemInCart() throws InterruptedException {
-		// Click Cart Icon in Nav Bar
 		WebElement cartButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("show-your-cart")));
 		cartButton.click();
-		// Verify Item have been Added in Cart
 	    WebElement verifyCartItem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-cart-product')]")));
 	    assertEquals(verifyCartItem.isDisplayed(), true, "No Item in Cart!");
 	}
@@ -147,7 +123,6 @@ public class TC10_SavingItemForLater {
 	@AfterClass
 	public void tearDown() {
 		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'row row-cart-product')]")));
-		// Delete all item
 		List<WebElement> elements = driver.findElements(By.xpath("//a[contains(@class, 'btn btn-save-remove')]"));
 		for(int i = 0;i<elements.size();i++) {
 			WebElement removeSaveButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'btn btn-save-remove')]")));

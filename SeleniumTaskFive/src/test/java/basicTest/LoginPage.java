@@ -1,5 +1,8 @@
 package basicTest;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -27,4 +30,22 @@ public class LoginPage {
     public void clickLoginButton() {
         driver.findElement(loginButton).click();
     }
+    
+    public String extractNumber(String priceString) {
+		String result = "";
+
+		String regex = "Rp\\s+(\\d+(?:,\\d+)*)"; 
+
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(priceString);
+
+        if (matcher.find()) {
+            String price = matcher.group(1); 
+            result = price;
+        } else {
+            System.out.println("Price not found in the string.");
+        }
+        return result;
+	}
 }

@@ -26,17 +26,13 @@ public class TC14_MovedSaveItemsToCart {
 	
 	@BeforeClass
 	public void setUp() {
-		// setting up the driver
-		// Please Update to your own path to ChromeDriver
 		System.setProperty("webdriver.chrome.driver", "/Users/timothyandrian/Downloads/chromedriver-mac-arm64/chromedriver");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://periplus.com");
 		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		loginPage = new LoginPage(driver);
-		//LOGIN TEST
 		
-		// Click Sign In
 		WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-signin-text")));
 	    signInButton.click();
 	    
@@ -45,13 +41,10 @@ public class TC14_MovedSaveItemsToCart {
 	    loginPage.enterPassword(password);
 	    loginPage.clickLoginButton();
 	    
-	    // Wait for a successful login indicator (e.g., welcome message) to appear
 	    WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-account')]")));
 
-	    // Assertion to verify successful login
 	    assertTrue(welcomeMessage.isDisplayed(), "Login failed! Personal Information Not Appear!");
 	    
-	    // Go to Home Page
 	    driver.get("https://periplus.com");
 	}
 

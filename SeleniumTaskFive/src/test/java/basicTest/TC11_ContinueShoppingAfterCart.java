@@ -17,7 +17,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-public class TC11_ContinueShoppingAFterCart {
+public class TC11_ContinueShoppingAfterCart {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private String username = "taskfivetasktimothy@gmail.com";
@@ -26,32 +26,24 @@ public class TC11_ContinueShoppingAFterCart {
 	
 	@BeforeClass
 	public void setUp() {
-		// setting up the driver
-		// Please Update to your own path to ChromeDriver
 		System.setProperty("webdriver.chrome.driver", "/Users/timothyandrian/Downloads/chromedriver-mac-arm64/chromedriver");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://periplus.com");
 		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		loginPage = new LoginPage(driver);
-		//LOGIN TEST
 		
-		// Click Sign In
 		WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-signin-text")));
 	    signInButton.click();
 	    
-	    // Enter email
 	    loginPage.enterUsername(username);
 	    loginPage.enterPassword(password);
 	    loginPage.clickLoginButton();
 	    
-	    // Wait for a successful login indicator (e.g., welcome message) to appear
 	    WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-account')]")));
 
-	    // Assertion to verify successful login
 	    assertTrue(welcomeMessage.isDisplayed(), "Login failed! Personal Information Not Appear!");
 	    
-	    // Go to Home Page
 	    driver.get("https://periplus.com");
 	}
 
@@ -62,12 +54,9 @@ public class TC11_ContinueShoppingAFterCart {
 	    wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'single-product')]")));
 	    List<WebElement> items = driver.findElements(By.xpath("//div[contains(@class, 'single-product') and not(.//div[contains(text(), 'CURRENTLY UNAVAILABLE')])]//a"));
 
-        // Iterate through the items
         for (WebElement element : items) {
-            if (!element.getText().isEmpty()) { // Check if the item has text
-                System.out.println("Adding item: " + element.getText());
+            if (!element.getText().isEmpty()) {
 
-                // Click on the item
                 element.click();
                 break;
             }
