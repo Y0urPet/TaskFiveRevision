@@ -24,7 +24,10 @@ public class TC2_ModifyItemInCart {
 	private String password = "timothytask555";
 	private String oldItemQuantity = "";
 	private String newQuantity = "";
-private LoginPage loginPage;
+	private LoginPage loginPage;
+	private DetailPage detailPage;
+	private HomePage homePage;
+	private CartPage cartPage;
 	
 	@BeforeClass
 	public void setUp() {
@@ -32,83 +35,63 @@ private LoginPage loginPage;
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://periplus.com");
-		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+	
 		loginPage = new LoginPage(driver);
+		detailPage = new DetailPage(driver);
+		cartPage = new CartPage(driver);
+		homePage = new HomePage(driver);
 		
-		WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-signin-text")));
-	    signInButton.click();
+		homePage.clickSignInButton();
 	    
 	    loginPage.enterUsername(username);
 	    loginPage.enterPassword(password);
 	    loginPage.clickLoginButton();
-	    
-	    WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-account')]")));
-
-	    assertTrue(welcomeMessage.isDisplayed(), "Login failed! Personal Information Not Appear!");
+	    loginPage.verifySuccessLogin();
 	    
 	    driver.get("https://periplus.com");
 	}
 
 	@Test(priority = 0)
 	public void chooseItem() throws InterruptedException {
-		WebElement previousButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class, 'owl-prev')]")));
-		previousButton.click();
-		
-	    WebElement firstActiveItem = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class, 'owl-stage')]//div[contains(@class, 'owl-item active')]//div[@class='single-product']//div[not(contains(@class, 'currently-unavailable'))]//a")));
-	    firstActiveItem.click();
+		homePage.clickPreviousButton();
+		homePage.clickTheFirstItem();
 	 }
 	
 	@Test(priority = 1)
 	public void addItemToCart() throws InterruptedException {
-	    WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'btn btn-add-to-cart')]")));
-	    addToCartButton.click();	    
+	    detailPage.clickAddToCart();	    
 	    
-	    WebElement modalText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'modal-text')]")));
-	    assertEquals(modalText.getText(),"Success add to cart", "Item failed to be added to cart");
+	    detailPage.verifySuccessAddingItemCart();
 	    
-	    WebElement closeModalButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class, 'btn btn-modal-close close')]")));
-	    closeModalButton.click();
+	    detailPage.clickCloseModal();
 	    
-	    WebElement cartButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("show-your-cart")));
-	    cartButton.click();
+	    detailPage.gotoCartPage();
 	    
-	    WebElement inputNumber = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[contains(@class, 'input-number text-center')]")));
-	    oldItemQuantity = inputNumber.getDomAttribute("value");
-	    System.out.println("Ini total: "+oldItemQuantity);
+	    oldItemQuantity = cartPage.getSpinnerValue();
 	}
 	
 	@Test(priority = 2)
 	public void modifyItemInCart() throws InterruptedException{
-		WebElement plusButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class, 'button plus')]")));
-		plusButton.click();
+		cartPage.clickPlusQuantityButton();
 	}
 	
 	@Test(priority = 3)
 	public void verifyItemInCart() throws InterruptedException {
-	    WebElement verifyCartItem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-cart-product')]")));
-	    assertEquals(verifyCartItem.isDisplayed(), true, "No Item in Cart!");
+	    cartPage.verifyCartFilled();
 	}
 	
 	@Test(priority = 4)
 	public void verifyItemBeenModified() throws InterruptedException {
 		driver.get("https://www.periplus.com/checkout/cart");
 		
-		WebElement inputNumber = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[contains(@class, 'input-number text-center')]")));
-		newQuantity = inputNumber.getDomAttribute("value"); 
-		System.out.println("Ini total Baru: "+newQuantity);
+		newQuantity = cartPage.getSpinnerValue();
 		
-	    boolean isDifferent = false;
-	    
-	    if (Integer.parseInt(oldItemQuantity) != Integer.parseInt(newQuantity)) {
-	    	isDifferent = true;
-	    }
-	    assertEquals(isDifferent, true, "The item is not modified");
+		cartPage.verifyDifferencesQuantity(oldItemQuantity, newQuantity);
 	}
 
 	@AfterClass
 	public void tearDown() {
-		WebElement removeButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'btn btn-cart-remove')]")));
-		removeButton.click();
+		cartPage.removeAllItemInCart();
 		driver.quit();
 	}
 }

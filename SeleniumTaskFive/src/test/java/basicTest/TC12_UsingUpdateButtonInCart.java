@@ -23,6 +23,9 @@ public class TC12_UsingUpdateButtonInCart {
 	private String username = "taskfivetasktimothy@gmail.com";
 	private String password = "timothytask555";
 	private LoginPage loginPage;
+	private DetailPage detailPage;
+	private HomePage homePage;
+	private CartPage cartPage;
 	
 	@BeforeClass
 	public void setUp() {
@@ -30,73 +33,50 @@ public class TC12_UsingUpdateButtonInCart {
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://periplus.com");
-		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
 		loginPage = new LoginPage(driver);
+		detailPage = new DetailPage(driver);
+		cartPage = new CartPage(driver);
+		homePage = new HomePage(driver);
 		
-		WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-signin-text")));
-	    signInButton.click();
+		homePage.clickSignInButton();
 	    
 	    loginPage.enterUsername(username);
 	    loginPage.enterPassword(password);
 	    loginPage.clickLoginButton();
-	    
-	    WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-account')]")));
-
-	    assertTrue(welcomeMessage.isDisplayed(), "Login failed! Personal Information Not Appear!");
+	    loginPage.verifySuccessLogin();
 	    
 	    driver.get("https://periplus.com");
 	}
 
 	@Test(priority = 0)
 	public void chooseItem() throws InterruptedException {	
-	    int counter = 0;
-
-	    wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'single-product')]")));
-	    List<WebElement> items = driver.findElements(By.xpath("//div[contains(@class, 'single-product') and not(.//div[contains(text(), 'CURRENTLY UNAVAILABLE')])]//a"));
-
-        for (WebElement element : items) {
-            if (!element.getText().isEmpty()) {
-
-                element.click();
-                break;
-            }
-        }
+	    homePage.clickPreviousButton();
+	    homePage.clickTheFirstItem();
 	}
 	
 	@Test(priority = 1) 
 	public void addItemToCart() throws InterruptedException {
 		// Wait for the Add to Cart button and click it
-        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'btn btn-add-to-cart')]")));
-        addToCartButton.click();
+        detailPage.clickAddToCart();
 
         // Verify success modal
-        WebElement modalText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'modal-text')]")));
-        
-        SoftAssert softS = new SoftAssert();
-        softS.assertEquals(modalText.getText(), "Success add to cart", "Item failed to be added to cart");
+        detailPage.verifySuccessAddingItemCart();
 
         // Close the modal
-        WebElement closeModalButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'btn btn-modal-close close')]")));
-        closeModalButton.click();
-
-        driver.get("https://periplus.com");
+        detailPage.clickCloseModal();
+        
+        detailPage.gotoCartPage();
 	}
 	
 	@Test(priority = 2)
 	public void updateCart() throws InterruptedException {
-		WebElement updateButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'btn bg-transparent text-dark')]")));
-		updateButton.click();
+		cartPage.clickUpdateButton();
 	}
 	
 	@AfterClass
 	public void tearDown() {
-		driver.get("https://www.periplus.com/checkout/cart");
-		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'row row-cart-product')]")));
-		List<WebElement> elements = driver.findElements(By.xpath("//a[contains(@class, 'btn btn-cart-remove')]"));
-		for(int i = 0;i<elements.size();i++) {
-			WebElement removeButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'btn btn-cart-remove')]")));
-			removeButton.click();
-		}
+		cartPage.removeAllItemInCart();
 		driver.quit();
 	}
 }

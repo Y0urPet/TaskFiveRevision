@@ -27,6 +27,9 @@ public class TC8_CalculatingItemsWithDiscount {
 	private int oldItemPrice = 0;
 	private int newItemPrice = 0;
 	private LoginPage loginPage;
+	private DetailPage detailPage;
+	private HomePage homePage;
+	private CartPage cartPage;
 	
 	@BeforeClass
 	public void setUp() {
@@ -35,18 +38,18 @@ public class TC8_CalculatingItemsWithDiscount {
 		driver.manage().window().maximize();
 		driver.get("https://periplus.com");
 		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
 		loginPage = new LoginPage(driver);
+		detailPage = new DetailPage(driver);
+		cartPage = new CartPage(driver);
+		homePage = new HomePage(driver);
 		
-		WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-signin-text")));
-	    signInButton.click();
+		homePage.clickSignInButton();
 	    
 	    loginPage.enterUsername(username);
 	    loginPage.enterPassword(password);
 	    loginPage.clickLoginButton();
-	    
-	    WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-account')]")));
-
-	    assertTrue(welcomeMessage.isDisplayed(), "Login failed! Personal Information Not Appear!");
+	    loginPage.verifySuccessLogin();
 	    
 	    driver.get("https://periplus.com");
 	}
@@ -58,25 +61,23 @@ public class TC8_CalculatingItemsWithDiscount {
             List<WebElement> discountItems = driver.findElements(By.xpath(discountItemXPath));
 		 
             for(WebElement element: discountItems) {
-            	if(!element.getText().equals("")) {
+            	if(!element.getText().isEmpty()) {
             		element.click();
             		break;
             	}
             }
             WebElement oldPrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(@class, 'old')]")));
-            String oldPriceExtract = loginPage.extractNumber(oldPrice.getText());
+            String oldPriceExtract = cartPage.extractNumber(oldPrice.getText());
 			String oldPriceWithoutComma = oldPriceExtract.replace(",", "");
 			oldItemPrice = Integer.parseInt(oldPriceWithoutComma);						
             
 		    
-		    WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'btn btn-add-to-cart')]")));
-		    addToCartButton.click();	    
+		    detailPage.clickAddToCart();	    
 		    
-		    WebElement modalText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'modal-text')]")));
-		    assertEquals(modalText.getText(),"Success add to cart", "Item failed to be added to cart");
+		    detailPage.verifySuccessAddingItemCart();
 		    
-		    WebElement closeModalButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class, 'btn btn-modal-close close')]")));
-		    closeModalButton.click();
+		    detailPage.clickCloseModal();
+		    
 		    driver.get("https://periplus.com");
 		}
 	}
@@ -84,17 +85,15 @@ public class TC8_CalculatingItemsWithDiscount {
 	@Test(priority = 1)
 	public void verifyItemInCart() throws InterruptedException {
 		// Click Cart Icon in Nav Bar
-		WebElement cartButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("show-your-cart")));
-		cartButton.click();
+		detailPage.gotoCartPage();
 		// Verify Item have been Added in Cart
-	    WebElement verifyCartItem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'row row-cart-product')]")));
-	    assertEquals(verifyCartItem.isDisplayed(), true, "No Item in Cart!");
+	    cartPage.verifyCartFilled();
 	}
 	
 	@Test(priority = 2)
 	public void verifySubtotalPrice() throws InterruptedException {
 		WebElement subTotal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(@id, 'sub_total')]")));
-		String subTotalPrice = loginPage.extractNumber(subTotal.getText());
+		String subTotalPrice = cartPage.extractNumber(subTotal.getText());
 		String subTotalPriceWithoutComa = subTotalPrice.replace(",", "");
 		System.out.println("Subtotal: "+subTotalPriceWithoutComa);
 		System.out.println("OldPrice: "+oldItemPrice);
@@ -108,11 +107,7 @@ public class TC8_CalculatingItemsWithDiscount {
 
 	@AfterClass
 	public void tearDown() {
-		List<WebElement> elements = driver.findElements(By.xpath("//a[contains(@class, 'btn btn-cart-remove')]"));
-		for(int i = 0;i<elements.size();i++) {
-			WebElement removeButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'btn btn-cart-remove')]")));
-			removeButton.click();
-		}
+		cartPage.removeAllItemInCart();
 		driver.quit();
 	}
 }

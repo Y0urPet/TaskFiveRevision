@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="3" passed="3" failed="0" skipped="0">
+<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-01-19T19:46:53 WIB" name="Default suite" finished-at="2025-01-19T19:48:31 WIB" duration-ms="97577">
+  <suite started-at="2025-01-20T02:47:14 WIB" name="Default suite" finished-at="2025-01-20T02:48:45 WIB" duration-ms="90354">
     <groups>
     </groups>
-    <test started-at="2025-01-19T19:46:53 WIB" name="Default test" finished-at="2025-01-19T19:48:31 WIB" duration-ms="97577">
-      <class name="basicTest.TC1_AddItemToCart">
-        <test-method is-config="true" signature="setUp()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:46:53 WIB" name="setUp" finished-at="2025-01-19T19:47:52 WIB" duration-ms="58722" status="PASS">
+    <test started-at="2025-01-20T02:47:14 WIB" name="Default test" finished-at="2025-01-20T02:48:45 WIB" duration-ms="90354">
+      <class name="basicTest.TC9_CalculateItemPriceWithTax">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:basicTest.TC9_CalculateItemPriceWithTax@40a4337a]" started-at="2025-01-20T02:47:14 WIB" name="setUp" finished-at="2025-01-20T02:48:13 WIB" duration-ms="58185" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="chooseItem()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:47:52 WIB" name="chooseItem" finished-at="2025-01-19T19:48:07 WIB" duration-ms="15031" status="PASS">
+        <test-method signature="chooseItem()[pri:0, instance:basicTest.TC9_CalculateItemPriceWithTax@40a4337a]" started-at="2025-01-20T02:48:13 WIB" name="chooseItem" finished-at="2025-01-20T02:48:25 WIB" duration-ms="12747" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- chooseItem -->
-        <test-method signature="addItemToCart()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:48:07 WIB" name="addItemToCart" finished-at="2025-01-19T19:48:19 WIB" depends-on-methods="basicTest.TC1_AddItemToCart.chooseItem" duration-ms="11741" status="PASS">
+        <test-method signature="addItemToCart()[pri:1, instance:basicTest.TC9_CalculateItemPriceWithTax@40a4337a]" started-at="2025-01-20T02:48:25 WIB" name="addItemToCart" finished-at="2025-01-20T02:48:30 WIB" duration-ms="4286" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- addItemToCart -->
-        <test-method signature="verifyItemInCart()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:48:19 WIB" name="verifyItemInCart" finished-at="2025-01-19T19:48:19 WIB" depends-on-methods="basicTest.TC1_AddItemToCart.addItemToCart" duration-ms="299" status="PASS">
+        <test-method signature="verifyItemInCart()[pri:2, instance:basicTest.TC9_CalculateItemPriceWithTax@40a4337a]" started-at="2025-01-20T02:48:30 WIB" name="verifyItemInCart" finished-at="2025-01-20T02:48:36 WIB" duration-ms="6592" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- verifyItemInCart -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:48:19 WIB" name="tearDown" finished-at="2025-01-19T19:48:31 WIB" duration-ms="11724" status="PASS">
+        <test-method signature="verifySubtotalPrice()[pri:3, instance:basicTest.TC9_CalculateItemPriceWithTax@40a4337a]" started-at="2025-01-20T02:48:36 WIB" name="verifySubtotalPrice" finished-at="2025-01-20T02:48:37 WIB" duration-ms="947" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifySubtotalPrice -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:basicTest.TC9_CalculateItemPriceWithTax@40a4337a]" started-at="2025-01-20T02:48:37 WIB" name="tearDown" finished-at="2025-01-20T02:48:45 WIB" duration-ms="7538" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- basicTest.TC1_AddItemToCart -->
+      </class> <!-- basicTest.TC9_CalculateItemPriceWithTax -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
