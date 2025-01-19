@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="3" passed="3" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-01-19T19:46:53 WIB" name="Default suite" finished-at="2025-01-19T19:48:31 WIB" duration-ms="97577">
+    <groups>
+    </groups>
+    <test started-at="2025-01-19T19:46:53 WIB" name="Default test" finished-at="2025-01-19T19:48:31 WIB" duration-ms="97577">
+      <class name="basicTest.TC1_AddItemToCart">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:46:53 WIB" name="setUp" finished-at="2025-01-19T19:47:52 WIB" duration-ms="58722" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="chooseItem()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:47:52 WIB" name="chooseItem" finished-at="2025-01-19T19:48:07 WIB" duration-ms="15031" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- chooseItem -->
+        <test-method signature="addItemToCart()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:48:07 WIB" name="addItemToCart" finished-at="2025-01-19T19:48:19 WIB" depends-on-methods="basicTest.TC1_AddItemToCart.chooseItem" duration-ms="11741" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- addItemToCart -->
+        <test-method signature="verifyItemInCart()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:48:19 WIB" name="verifyItemInCart" finished-at="2025-01-19T19:48:19 WIB" depends-on-methods="basicTest.TC1_AddItemToCart.addItemToCart" duration-ms="299" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifyItemInCart -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:basicTest.TC1_AddItemToCart@6025e1b6]" started-at="2025-01-19T19:48:19 WIB" name="tearDown" finished-at="2025-01-19T19:48:31 WIB" duration-ms="11724" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- basicTest.TC1_AddItemToCart -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
