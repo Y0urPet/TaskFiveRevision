@@ -1,5 +1,5 @@
-This revision have the improvement of:
+This revision has the improvement of:
 - 15 new Test Cases
-- Using Assertion to asses each test steps
-- Using Page Object approach
-- Include the payment total of the item in cart
+- Using Assertion to asses each test step
+- Using Pthe age Object approach
+- Include the payment total item prices in the cart
